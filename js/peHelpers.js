@@ -1,3 +1,9 @@
+let zeroPadIntArray = function(intArray, arrayLength) {
+    let zeroPad = new Array(arrayLength - intArray.length);
+    zeroPad = zeroPad.fill(0);
+    return intArray.concat(zeroPad);
+};
+
 let peHelpers = {
     "getDivisors": function(integerToFactor, primeArray) {
         let integerDivisors = new Set([1]);
@@ -66,6 +72,45 @@ let peHelpers = {
         }
 
         return seedPrimes;
+    },
+
+    "addStringsAsIntegers": function(intStringOne, intStringTwo) {
+        // Convert strings to arrays and reverse so lowest "end" has lowest index
+        let intOne = intStringOne.split("");
+        intOne = intOne.map(x => Number.parseInt(x));
+        intOne.reverse();
+        let intTwo = intStringTwo.split("");
+        intTwo = intTwo.map(x => Number.parseInt(x));
+        intTwo.reverse();
+
+        // Balance array lengths
+        if (intOne.length !== intTwo.length) {
+            if (intOne.length > intTwo.length)
+                intTwo = zeroPadIntArray(intTwo, intOne.length);
+            else
+                intOne = zeroPadIntArray(intOne, intTwo.length);
+        }
+
+        // Add arrays
+        let carry = 0;
+        let sumArray = [];
+        let tempSum;
+        for (let i = 0; i < intOne.length; i++) {
+            tempSum = intOne[i] + intTwo[i] + carry;
+            if (tempSum > 9) {
+                carry = 1;
+                tempSum -= 10;
+            }
+            else
+                carry = 0;
+            sumArray[i] = tempSum;
+        }
+        if (carry === 1)
+            sumArray.push(1);
+
+        // Return new string
+        sumArray.reverse();
+        return sumArray.join("");
     }
 };
 
