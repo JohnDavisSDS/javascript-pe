@@ -111,6 +111,38 @@ let peHelpers = {
         // Return new string
         sumArray.reverse();
         return sumArray.join("");
+    },
+
+    // Accepts denominator, returns object with "result" string and "repeatingPortion" string properties
+    "longDivideUnitFraction": function (denominator) {
+        let numerator = 1;
+        let numerators = [];
+        let isCrunching = true;
+        let result = "0.";
+        let repeatingPortion = "";
+        let resultDigit;
+
+        while (isCrunching) {
+            numerator *= 10;
+            if (numerators.includes(numerator)) {
+                let startIndex = numerators.findIndex(x => x === numerator);
+                repeatingPortion = result.slice(startIndex - numerators.length);
+                isCrunching = false;
+            }
+            else {
+                numerators.push(numerator);
+                resultDigit = Math.trunc(numerator / denominator);
+                result += resultDigit;
+                numerator -= resultDigit * denominator;
+                if (numerator === 0)
+                    isCrunching = false;
+            }
+        }
+
+        return {
+            "result": result,
+            "repeatingPortion": repeatingPortion
+        };
     }
 };
 
