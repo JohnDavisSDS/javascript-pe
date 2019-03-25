@@ -38,13 +38,15 @@ let peHelpers = {
         return Array.from(integerDivisors);
     },
 
-    "getPrimes": function(maxPrime) {
-        let seedPrimes = [2, 3, 5, 7];
+    "getPrimes": function(maxPrime, seedPrimes) {
+        if (seedPrimes == null)
+            seedPrimes = [2, 3, 5, 7];
         let lastPrimeIndex;
         let lastPrime;
         let start;
         let end;
         let isPrime;
+        let sqRoot;
         let gettingPrimes = true;
 
         while (gettingPrimes) {
@@ -58,11 +60,14 @@ let peHelpers = {
                     break;
 
                 isPrime = true;
+                sqRoot = Math.pow(i, 0.5);
                 for (let j = 0; j <= lastPrimeIndex; j++) {
                     if (!isPrime)
                         break;
                     if (i % seedPrimes[j] === 0)
                         isPrime = false;
+                    if (seedPrimes[j] > sqRoot)
+                        break;
                 }
                 if (isPrime)
                     seedPrimes.push(i);
